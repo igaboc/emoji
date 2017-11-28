@@ -60,6 +60,22 @@ class App extends Component {
     })
   }
 
+  filterCompletedItems = function(items) {
+    const completedItems = items.map((item) => (
+      item.completed ? item : null
+    ))
+    console.log(completedItems)
+    return completedItems
+  }
+
+  filterIncompletedItems = function(items) {
+    const IncompletedItems = items.map((item) => (
+      item.completed ? null : item
+    ))
+    console.log(IncompletedItems)
+    return IncompletedItems
+  }
+
   render() {
     const items = this.state.items
     
@@ -75,34 +91,78 @@ class App extends Component {
         totalIncomplete += 1
       }
     })
-
     return (
       <div className="App">
       <dl>
         <dt> Total </dt>
         <dd> {total} </dd>
+      {
+        items.map((item, index) => (
+          <div>
+            <ToDoItem 
+              key={ index }
+              description={ item.description }
+              completed={ item.completed }
+              onToggleCompleted={
+                () => {
+                  console.log('ToDoItem onToggleCompleted received', index)
+                  this.onToggleItemAtIndex(index)
+                }
+              }
+            />
+          </div>
+        ))
+      }
 
         <dt> Total Completed </dt>
         <dd> {totalCompleted} </dd>
+        { this.filterCompletedItems(items).map((item, index) => {
+            if (item) {
+              return (
+                <ToDoItem
+                  key={ index }
+                  description={ item.description }
+                  completed={ item.completed }
+                  onToggleCompleted={
+                    () => {
+                      console.log('ToDoItem onToggleCompleted received', index)
+                      this.onToggleItemAtIndex(index)
+                    }
+                  }
+                />
+              )
+            }
+            else {
+              return null
+            }
+          })
+          }
+
 
         <dt> Total Incomplete </dt>
         <dd> {totalIncomplete} </dd>
-      </dl>
-      {
-        items.map((item, index) => (
-          <ToDoItem 
-            key={ index }
-            description={ item.description }
-            completed={ item.completed }
-            onToggleCompleted={
-              () => {
-                console.log('ToDoItem onToggleCompleted received', index)
-                this.onToggleItemAtIndex(index)
-              }
+        { this.filterIncompletedItems(items).map((item, index) => {
+            if (item) {
+              return (
+                <ToDoItem
+                  key={ index }
+                  description={ item.description }
+                  completed={ item.completed }
+                  onToggleCompleted={
+                    () => {
+                      console.log('ToDoItem onToggleCompleted received', index)
+                      this.onToggleItemAtIndex(index)
+                    }
+                  }
+                />
+              )
             }
-          />
-        ))
-      }
+            else {
+              return null
+            }
+          })
+          }
+      </dl>
       </div>
     );
   }
