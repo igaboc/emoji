@@ -76,6 +76,10 @@ class App extends Component {
     return IncompletedItems
   }
 
+  onChangeItemDescriptionAtIndex(index, description) {
+    
+  }
+
   render() {
     const items = this.state.items
     
